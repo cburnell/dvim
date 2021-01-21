@@ -1,0 +1,6 @@
+version: "3.8"
+services:
+  nvim:
+    environment:
+      - GIT_USER_NAME="cburnell"
+      - GIT_USER_EMAIL="c.burnell@gmail.com"
