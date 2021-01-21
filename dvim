@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+docker run -e COLUMNS=`tput cols` -e LINES=`tput lines`  --rm -it -v $PWD:/workspace -v ~/.ssh:/home/cburn/.ssh  cburn:v1
+
+
