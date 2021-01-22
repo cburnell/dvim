@@ -74,7 +74,6 @@ WORKDIR /home/cburn/repos
 RUN curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 WORKDIR /home/cburn
-COPY .zshrc .zshrc
 COPY nvim .config/nvim/
 
 
