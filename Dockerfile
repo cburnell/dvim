@@ -3,7 +3,7 @@ FROM ubuntu:latest
 #ENV TERM screen-256color
 ENV DEBIAN_FRONTEND noninteractive
 ENV Lang en_us.utf-8
-
+ENV CMAKE_BUILD_TYPE=RelWithDebInfo
 
 RUN apt-get upgrade && apt-get update && apt-get install -y \
       apt-utils\
