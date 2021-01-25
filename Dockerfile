@@ -85,6 +85,8 @@ RUN nvim +PlugInstall +qall
 RUN timeout 10s nvim --headless +CocInstall; exit 0 
 # we run it again and then we dont have coc install its stuff when we run it
 RUN timeout 2m nvim --headless +CocInstall; exit 0
+# we run it again and then we dont have coc install its stuff when we run it
+RUN timeout 2m nvim --headless +CocInstall; exit 0
 # This was something i was exploring but I don't like
 # Install Tmux Plugin Manager
 #RUN git clone https://github.com/tmux-plugins/tpm .tmux/plugins/tpm
