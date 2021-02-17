@@ -3,7 +3,7 @@ FROM ubuntu:latest
 #ENV TERM screen-256color
 ENV DEBIAN_FRONTEND noninteractive
 ENV Lang en_us.utf-8
-
+ENV CMAKE_BUILD_TYPE=RelWithDebInfo
 
 RUN apt-get upgrade && apt-get update && apt-get install -y \
       apt-utils\
@@ -83,6 +83,8 @@ RUN pip3 install neovim-remote black isort flake8 jedi rope
 RUN nvim +PlugInstall +qall 
 # This installs black but then needs an ENTER which we cant do so
 RUN timeout 10s nvim --headless +CocInstall; exit 0 
+# we run it again and then we dont have coc install its stuff when we run it
+RUN timeout 2m nvim --headless +CocInstall; exit 0
 # we run it again and then we dont have coc install its stuff when we run it
 RUN timeout 2m nvim --headless +CocInstall; exit 0
 # This was something i was exploring but I don't like
