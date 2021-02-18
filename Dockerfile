@@ -78,15 +78,16 @@ COPY nvim .config/nvim/
 
 
 ENV PATH="/home/cburn/.local/bin:${PATH}"
-RUN pip3 install neovim-remote black isort flake8 jedi rope
+RUN pip3 install neovim-remote black isort flake8 jedi rope 'python-language-server[all]'
+USER root
+RUN sudo npm install -g neovim
+USER cburn
 # Install plugins
-RUN nvim +PlugInstall +qall 
+RUN nvim +PlugInstall +UpdateRemotePlugins +qall 
 # This installs black but then needs an ENTER which we cant do so
 RUN timeout 10s nvim --headless +CocInstall; exit 0 
 # we run it again and then we dont have coc install its stuff when we run it
-RUN timeout 2m nvim --headless +CocInstall; exit 0
-# we run it again and then we dont have coc install its stuff when we run it
-RUN timeout 2m nvim --headless +CocInstall; exit 0
+RUN timeout 5m nvim --headless +CocInstall; exit 0
 # This was something i was exploring but I don't like
 # Install Tmux Plugin Manager
 #RUN git clone https://github.com/tmux-plugins/tpm .tmux/plugins/tpm
