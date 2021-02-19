@@ -50,6 +50,8 @@ RUN sudo add-apt-repository universe && apt-get upgrade -y && apt-get update -y 
       silversearcher-ag \
       tmux 
 
+RUN sudo npm install -g neovim
+
 RUN curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
 RUN useradd -ms /bin/bash cburn
@@ -74,14 +76,12 @@ WORKDIR /home/cburn/repos
 RUN curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 WORKDIR /home/cburn
+USER cburn
 COPY nvim .config/nvim/
 
 
 ENV PATH="/home/cburn/.local/bin:${PATH}"
 RUN pip3 install neovim-remote black isort flake8 jedi rope 'python-language-server[all]'
-USER root
-RUN sudo npm install -g neovim
-USER cburn
 # Install plugins
 RUN nvim +PlugInstall +UpdateRemotePlugins +qall 
 # This installs black but then needs an ENTER which we cant do so
