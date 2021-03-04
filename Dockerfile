@@ -64,7 +64,6 @@ WORKDIR /home/cburn/repos
 #git and make neovim this gets us to 0.4.4
 RUN git clone https://github.com/neovim/neovim.git
 WORKDIR /home/cburn/repos/neovim
-RUN git checkout stable
 RUN make
 RUN make CMAKE_INSTALL_PREFIX=$HOME/local/nvim install
 ENV PATH="/home/cburn/local/nvim/bin:${PATH}"
@@ -72,22 +71,23 @@ ENV PATH="/home/cburn/local/nvim/bin:${PATH}"
 #COPY ~tmux.conf .tmux.conf
 
 # Install Vim Plug for plugin management
-WORKDIR /home/cburn/repos
-RUN curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
 WORKDIR /home/cburn
 USER cburn
 COPY nvim .config/nvim/
-
+USER root
+RUN chown -R cburn:cburn /home/cburn
+USER cburn
 
 ENV PATH="/home/cburn/.local/bin:${PATH}"
 RUN pip3 install neovim-remote black isort flake8 jedi rope 'python-language-server[all]'
 # Install plugins
+RUN curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
 RUN nvim +PlugInstall +UpdateRemotePlugins +qall 
 # This installs black but then needs an ENTER which we cant do so
 RUN timeout 10s nvim --headless +CocInstall; exit 0 
 # we run it again and then we dont have coc install its stuff when we run it
-RUN timeout 5m nvim --headless +CocInstall; exit 0
+RUN timeout 10m nvim --headless +CocInstall; exit 0
 # This was something i was exploring but I don't like
 # Install Tmux Plugin Manager
 #RUN git clone https://github.com/tmux-plugins/tpm .tmux/plugins/tpm
@@ -95,4 +95,5 @@ RUN timeout 5m nvim --headless +CocInstall; exit 0
 #RUN .tmux/plugins/tpm/bin/install_plugins
 USER cburn
 WORKDIR /workspace
-CMD ["nvim"]
+ENV file .
+ENTRYPOINT ["nvim"]
